@@ -17,7 +17,8 @@ public class WebConfig{
                         .allowedOrigins("https://geo-lilac-one.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(true)
+                        .maxAge(3600);
             }
         };
     }
