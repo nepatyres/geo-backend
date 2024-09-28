@@ -15,7 +15,9 @@ public class WebConfig{
             public void addCorsMappings(CorsRegistry registry){
                 registry.addMapping("/**")
                         .allowedOrigins("https://geo-lilac-one.vercel.app")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
