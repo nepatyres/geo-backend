@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "https://geo-lilac-one.vercel.app", allowCredentials = "true")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user){
-        //validation logic will be here:
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        // Add validation logic here if needed
         user = userRepository.save(user);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         User user = new User();
         user.setName("Test User");
         userRepository.save(user);
