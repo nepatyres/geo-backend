@@ -1,23 +1,15 @@
-package com.geo.controller;
+package com.geo.controller; // Adjust package as needed
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-import java.util.Map;
-
-@RestController
+@Controller
+@RequestMapping("/") // This will map the root URL
 public class DatabaseTestController {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @GetMapping("/test-connection")
-    public List<Map<String, Object>> testConnection() {
-        String sql = "SELECT * FROM pg_stat_user_tables";
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-        return result;
+    @GetMapping
+    public String home() {
+        return "home"; // This should match a template file name in your resources/templates directory
     }
 }
