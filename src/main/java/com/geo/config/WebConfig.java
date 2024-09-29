@@ -12,9 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://geo-lilac-one.vercel.app")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
+                .allowedHeaders("Content-Type", "Authorization", "X-Requested-With")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
