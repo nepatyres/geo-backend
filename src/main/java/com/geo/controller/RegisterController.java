@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "https://geo-lilac-one.vercel.app", allowCredentials = "true")
-public class UserController {
+@CrossOrigin(origins = "https://geo-lilac-one.vercel.app", allowedHeaders = "*", allowCredentials = "true")
+public class RegisterController {
 
     @Autowired
     private UserRepository userRepository;

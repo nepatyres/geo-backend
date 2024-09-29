@@ -14,9 +14,9 @@ public class WebConfig {
             @Override
             public void addCorsMappings (CorsRegistry registry){
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://geo-lilac-one.vercel.app/")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("Authorization", "Content-Type", "X-Requested-With", "Accept")
+                        .allowedHeaders("*")
                         .exposedHeaders("Authorization", "Content-Type")
                         .allowCredentials(true)
                         .maxAge(3600);
