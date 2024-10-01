@@ -1,0 +1,16 @@
+runtime: java21
+instance_class: F2
+
+env_variables:
+  SPRING_PROFILES_ACTIVE: "prod"
+
+handlers:
+  - url: /.*
+    script: auto
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
+  target_cpu_utilization: 0.65
+  target_throughput_utilization: 0.65
+  max_concurrent_requests: 50
