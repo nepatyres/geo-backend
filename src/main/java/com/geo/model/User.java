@@ -1,6 +1,10 @@
 package com.geo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,12 +14,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
+    @NotBlank(message = "Email is missing")
+    @Email(message = "Email should be valid")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Username is missing")
+    @Size(min = 5, message = "Username must be at least 5 characters")
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @NotBlank(message = "Password is missing")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     @Column(nullable = false)
     private String password;
 

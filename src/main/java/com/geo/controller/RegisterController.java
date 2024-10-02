@@ -2,11 +2,17 @@ package com.geo.controller;
 
 import com.geo.model.User;
 import com.geo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -20,16 +26,16 @@ public class RegisterController {
         try {
             User savedUser = userService.save(user);
             return ResponseEntity.ok(savedUser);
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or Email already exists.");
+        } catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (DataIntegrityViolationException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Username or Email already exists");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } catch (Exception e) {
-            System.err.println("Error during registration: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "An unexpected error occured. Please try again later.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
-    }
-
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello, World!";
     }
 }
