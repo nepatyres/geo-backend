@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class
+UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
