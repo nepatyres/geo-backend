@@ -2,6 +2,7 @@ package com.geo.controller;
 
 import com.geo.model.User;
 import com.geo.service.UserService;
+import com.geo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,20 @@ public class RegisterController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             User savedUser = userService.save(user);
-            return ResponseEntity.ok(savedUser);
+            String jwtToken = jwtUtil.generateToken(savedUser.getUsername());
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwtToken);
+            return ResponseEntity.ok(response);
         } catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Username or Email already exists");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
