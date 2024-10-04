@@ -26,10 +26,16 @@ public class GameStatsController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> saveGameStats(@RequestBody GameStats gameStats, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> saveGameStats(@RequestBody GameStats gameStats, @RequestHeader("Authorization") String authHeader) {
         try {
-            String username = jwtUtil.extractUsername(token.substring(7)); // Remove "Bearer " prefix
-            if (username != null && !username.equals("anonymousUser")) {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing Authorization header");
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtUtil.extractUsername(token);
+
+            if (username != null && jwtUtil.validateToken(token, username)) {
                 if (!username.equals(gameStats.getUsername())) {
                     logger.warn("Attempt to save game stats for a different user");
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot save stats for a different user");
@@ -38,12 +44,12 @@ public class GameStatsController {
                 logger.info("Game stats saved for user: {}", username);
                 return ResponseEntity.ok(savedStats);
             } else {
-                logger.warn("Attempt to save game stats for unauthenticated user");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+                logger.warn("Invalid token for user: {}", username);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
             }
         } catch(Exception e) {
             logger.error("Error saving game stats", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving game stats");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving game stats: " + e.getMessage());
         }
     }
 
