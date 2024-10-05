@@ -56,12 +56,12 @@ public class GameStatsController {
     @GetMapping
     public ResponseEntity<?> getGameStats(@RequestHeader("Authorization") String token) {
         try {
-            String username = jwtUtil.extractUsername(token.substring(7)); // Remove "Bearer " prefix
+            String username = jwtUtil.extractUsername(token.substring(7));
             if (username != null && !username.equals("anonymousUser")) {
                 List<GameStats> gameStatsList = gameStatsRepository.findByUsername(username);
 
                 if (!gameStatsList.isEmpty()) {
-                    return ResponseEntity.ok(gameStatsList); // Return all game stats
+                    return ResponseEntity.ok(gameStatsList);
                 } else {
                     logger.info("No game stats found for user: {}", username);
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No game stats available for this user.");
